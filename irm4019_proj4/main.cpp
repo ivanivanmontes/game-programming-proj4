@@ -22,6 +22,7 @@
 #include "Map.h"
 #include "Utility.h"
 #include "Scene.h"
+#include "Menu.h"
 #include "LevelA.h"
 #include "LevelB.h"
 #include "Effects.h"
@@ -49,11 +50,12 @@ enum AppStatus { RUNNING, TERMINATED };
 
 // ––––– GLOBAL VARIABLES ––––– //
 Scene  *g_current_scene;
+Menu *g_menu;
 LevelA *g_levelA;
 LevelB *g_levelB;
 
 Effects *g_effects;
-Scene   *g_levels[2];
+Scene   *g_levels[3];
 
 SDL_Window* g_display_window;
 
@@ -115,11 +117,13 @@ void initialise()
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+    g_menu = new Menu();
     g_levelA = new LevelA();
     g_levelB = new LevelB();
     
-    g_levels[0] = g_levelA;
-    g_levels[1] = g_levelB;
+    g_levels[0] = g_menu;
+    g_levels[1] = g_levelA;
+    g_levels[2] = g_levelB;
     
     // Start at level A
     switch_to_scene(g_levels[0]);
@@ -149,6 +153,11 @@ void process_input()
                         // Quit the game with a keystroke
                         g_app_status = TERMINATED;
                         break;
+                        
+                    case SDLK_RETURN:
+                        switch_to_scene(g_levelA);
+                        break;
+                        
                         
                     case SDLK_SPACE:
                         // Jump

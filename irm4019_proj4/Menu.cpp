@@ -1,26 +1,29 @@
-#include "LevelA.h"
+#include "Menu.h"
 #include "Utility.h"
 
 #define LEVEL_WIDTH 14
 #define LEVEL_HEIGHT 8
 
 constexpr char SPRITESHEET_FILEPATH[] = "george_0.png",
-           ENEMY_FILEPATH[]       = "soph.png";
+           ENEMY_FILEPATH[]       = "soph.png",
+FONT_FILEPATH[]        = "font1.png";
+
+GLuint g_font_texture_id;
 
 
-unsigned int LEVELA_DATA[] =
+unsigned int MENU_DATA[] =
 {
-    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    3, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1,
-    3, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 2,
-    3, 2, 2, 2, 2, 2, 0, 0, 1, 1, 1, 0, 0, 2,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 };
 
-LevelA::~LevelA()
+Menu::~Menu()
 {
     delete [] m_game_state.enemies;
     delete    m_game_state.player;
@@ -29,12 +32,13 @@ LevelA::~LevelA()
     Mix_FreeMusic(m_game_state.bgm);
 }
 
-void LevelA::initialise()
+void Menu::initialise()
 {
     m_game_state.next_scene_id = -1;
     
     GLuint map_texture_id = Utility::load_texture("tileset.png");
-    m_game_state.map = new Map(LEVEL_WIDTH, LEVEL_HEIGHT, LEVELA_DATA, map_texture_id, 1.0f, 4, 1);
+    g_font_texture_id = Utility::load_texture(FONT_FILEPATH);
+    m_game_state.map = new Map(LEVEL_WIDTH, LEVEL_HEIGHT, MENU_DATA, map_texture_id, 1.0f, 4, 1);
     
     // Code from main.cpp's initialise()
     /**
@@ -98,20 +102,22 @@ void LevelA::initialise()
     
     m_game_state.bgm = Mix_LoadMUS("VeLDA.mp3");
     Mix_PlayMusic(m_game_state.bgm, -1);
-    Mix_VolumeMusic(20.0f);
+    //TODO: change this
+    Mix_VolumeMusic(0.0f);
     
     m_game_state.jump_sfx = Mix_LoadWAV("bounce.wav");
 }
 
-void LevelA::update(float delta_time)
+void Menu::update(float delta_time)
 {
     m_game_state.player->update(delta_time, m_game_state.player, m_game_state.enemies, ENEMY_COUNT, m_game_state.map);
     
     if (m_game_state.player->get_position().y < -10.0f) m_game_state.next_scene_id = 1;
 }
 
-void LevelA::render(ShaderProgram *program)
+void Menu::render(ShaderProgram *program)
 {
-    m_game_state.map->render(program);
-    m_game_state.player->render(program);
+//    m_game_state.map->render(program);
+//    m_game_state.player->render(program);
+    Utility::draw_text(program, g_font_texture_id, "my game: Press enter", 0.35f, 0.05f, glm::vec3(2.0f, -2.0f, 0.0f));
 }

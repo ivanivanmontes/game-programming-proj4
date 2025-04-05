@@ -5,7 +5,10 @@
 #define LEVEL_HEIGHT 8
 
 constexpr char SPRITESHEET_FILEPATH[] = "george_0.png",
-           ENEMY_FILEPATH[]       = "soph.png";
+           ENEMY_FILEPATH[]       = "soph.png",
+FONT_FILEPATH[] = "font1.png";
+
+GLuint g_font_texture_id_1;
 
 
 unsigned int LEVELA_DATA[] =
@@ -35,6 +38,8 @@ void LevelA::initialise()
     
     GLuint map_texture_id = Utility::load_texture("tileset.png");
     m_game_state.map = new Map(LEVEL_WIDTH, LEVEL_HEIGHT, LEVELA_DATA, map_texture_id, 1.0f, 4, 1);
+    
+    g_font_texture_id_1 = Utility::load_texture(FONT_FILEPATH);
     
     // Code from main.cpp's initialise()
     /**
@@ -86,7 +91,7 @@ void LevelA::initialise()
     }
 
 
-    m_game_state.enemies[0].set_position(glm::vec3(8.0f, 0.0f, 0.0f));
+    m_game_state.enemies[0].set_position(glm::vec3(5.0f, -5.0f, 0.0f));
     m_game_state.enemies[0].set_movement(glm::vec3(0.0f));
     m_game_state.enemies[0].set_acceleration(glm::vec3(0.0f, -9.81f, 0.0f));
     
@@ -106,6 +111,7 @@ void LevelA::initialise()
 void LevelA::update(float delta_time)
 {
     m_game_state.player->update(delta_time, m_game_state.player, m_game_state.enemies, ENEMY_COUNT, m_game_state.map);
+    for (int i = 0; i < ENEMY_COUNT; i++) m_game_state.enemies[i].update(delta_time, m_game_state.player, m_game_state.enemies, ENEMY_COUNT, m_game_state.map);
     
     if (m_game_state.player->get_position().y < -10.0f) m_game_state.next_scene_id = 1;
 }
@@ -114,4 +120,11 @@ void LevelA::render(ShaderProgram *program)
 {
     m_game_state.map->render(program);
     m_game_state.player->render(program);
+    
+    
+    Utility::draw_text(program, g_font_texture_id_1, "lives: " + std::to_string(m_game_state.player->get_lives()), 0.35f, 0.05f, m_game_state.player->get_position());
+    
+//    if (m_game_state.player->get_lives() == 0) {
+//        Utility::draw_text(program, g_font_texture_id_1, "you lose ", 0.35f, 0.05f, m_game_state.player->get_position());
+//    }
 }

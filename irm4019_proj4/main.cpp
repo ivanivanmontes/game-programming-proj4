@@ -25,6 +25,8 @@
 #include "Menu.h"
 #include "LevelA.h"
 #include "LevelB.h"
+#include "LevelC.h"
+#include "EndScreen.h"
 #include "Effects.h"
 
 // ––––– CONSTANTS ––––– //
@@ -53,9 +55,11 @@ Scene  *g_current_scene;
 Menu *g_menu;
 LevelA *g_levelA;
 LevelB *g_levelB;
+LevelC *g_levelC;
+EndScreen *g_end;
 
 Effects *g_effects;
-Scene   *g_levels[3];
+Scene   *g_levels[5];
 
 SDL_Window* g_display_window;
 
@@ -120,10 +124,14 @@ void initialise()
     g_menu = new Menu();
     g_levelA = new LevelA();
     g_levelB = new LevelB();
+    g_levelC = new LevelC();
+    g_end = new EndScreen();
     
     g_levels[0] = g_menu;
     g_levels[1] = g_levelA;
     g_levels[2] = g_levelB;
+    g_levels[3] = g_levelC;
+    g_levels[4] = g_end;
     
     // Start at level A
     switch_to_scene(g_levels[0]);
@@ -155,7 +163,7 @@ void process_input()
                         break;
                         
                     case SDLK_RETURN:
-                        switch_to_scene(g_levelA);
+                        if (g_current_scene == g_menu) switch_to_scene(g_levelA);
                         break;
                         
                         
@@ -224,6 +232,8 @@ void update()
     }
     
     if (g_current_scene == g_levelA && g_current_scene->get_state().player->get_position().y < -10.0f) switch_to_scene(g_levelB);
+    if (g_current_scene == g_levelB && g_current_scene->get_state().player->get_position().y < -10.0f) switch_to_scene(g_levelC);
+    if (g_current_scene == g_levelC && g_current_scene->get_state().player->get_position().y < -10.0f) switch_to_scene(g_end);
     
 //    g_view_matrix = glm::translate(g_view_matrix, g_effects->get_view_offset());
 }

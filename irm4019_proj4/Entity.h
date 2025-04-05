@@ -14,6 +14,9 @@ enum AnimationDirection { LEFT, RIGHT, UP, DOWN };
 class Entity
 {
 private:
+    
+    int lives = 3;
+    
     bool m_is_active = true;
     
     int m_walking[4][4]; // 4x4 array for walking animations
@@ -116,6 +119,7 @@ public:
     bool      const get_collided_bottom() const { return m_collided_bottom; }
     bool      const get_collided_right() const { return m_collided_right; }
     bool      const get_collided_left() const { return m_collided_left; }
+    int const get_lives() const { return lives; }
     
     void activate()   { m_is_active = true;  };
     void deactivate() { m_is_active = false; };
@@ -138,6 +142,7 @@ public:
     void const set_jumping_power(float new_jumping_power) { m_jumping_power = new_jumping_power;}
     void const set_width(float new_width) {m_width = new_width; }
     void const set_height(float new_height) {m_height = new_height; }
+    void const set_lives (int new_lives) { lives = new_lives; }
 
     // Setter for m_walking
     void set_walking(int walking[4][4])

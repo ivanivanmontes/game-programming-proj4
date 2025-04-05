@@ -1,4 +1,4 @@
-#include "LevelB.h"
+#include "LevelC.h"
 #include "Utility.h"
 
 #define LEVEL_WIDTH 14
@@ -7,19 +7,19 @@
 constexpr char SPRITESHEET_FILEPATH[] = "george_0.png",
            ENEMY_FILEPATH[]       = "soph.png";
 
-unsigned int LEVELB_DATA[] =
+unsigned int LEVELC_DATA[] =
 {
     3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2,
-    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2,
-    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2,
-    3, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2,
-    3, 1, 1, 1, 1, 1, 1, 0, 1, 2, 2, 2, 2, 2,
-    3, 2, 2, 2, 2, 2, 2, 0, 2, 2, 2, 2, 2, 2
+    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2
 };
 
-LevelB::~LevelB()
+LevelC::~LevelC()
 {
     delete [] m_game_state.enemies;
     delete    m_game_state.player;
@@ -28,12 +28,12 @@ LevelB::~LevelB()
     Mix_FreeMusic(m_game_state.bgm);
 }
 
-void LevelB::initialise()
+void LevelC::initialise()
 {
     m_game_state.next_scene_id = -1;
     
     GLuint map_texture_id = Utility::load_texture("tileset.png");
-    m_game_state.map = new Map(LEVEL_WIDTH, LEVEL_HEIGHT, LEVELB_DATA, map_texture_id, 1.0f, 4, 1);
+    m_game_state.map = new Map(LEVEL_WIDTH, LEVEL_HEIGHT, LEVELC_DATA, map_texture_id, 1.0f, 4, 1);
     
     // Code from main.cpp's initialise()
     /**
@@ -103,13 +103,12 @@ void LevelB::initialise()
     m_game_state.jump_sfx = Mix_LoadWAV("bounce.wav");
 }
 
-void LevelB::update(float delta_time)
+void LevelC::update(float delta_time)
 {
     m_game_state.player->update(delta_time, m_game_state.player, m_game_state.enemies, ENEMY_COUNT, m_game_state.map);
-    if (m_game_state.player->get_position().y < -10.0f) m_game_state.next_scene_id = 1;
 }
 
-void LevelB::render(ShaderProgram *program)
+void LevelC::render(ShaderProgram *program)
 {
     m_game_state.map->render(program);
     m_game_state.player->render(program);

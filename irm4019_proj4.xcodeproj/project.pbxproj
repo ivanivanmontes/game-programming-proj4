@@ -85,6 +85,8 @@
 			membershipExceptions = (
 				bounce.wav,
 				font1.png,
+				Frame_5.png,
+				Frame_6.png,
 				george_0.png,
 				soph.png,
 				tileset.png,

@@ -1,26 +1,28 @@
 #include "LevelA.h"
 #include "Utility.h"
 
-#define LEVEL_WIDTH 14
+#define LEVEL_WIDTH 15
 #define LEVEL_HEIGHT 8
 
-constexpr char SPRITESHEET_FILEPATH[] = "george_0.png",
+constexpr char SPRITESHEET_FILEPATH[] = "Frame_5.png",
            ENEMY_FILEPATH[]       = "soph.png",
 FONT_FILEPATH[] = "font1.png";
+
+//int LIVES = 3;
 
 GLuint g_font_texture_id_1;
 
 
 unsigned int LEVELA_DATA[] =
 {
-    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    3, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1,
-    3, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 2,
-    3, 2, 2, 2, 2, 2, 0, 0, 1, 1, 1, 0, 0, 2,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0,
+    2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0,
 };
 
 LevelA::~LevelA()
@@ -36,7 +38,9 @@ void LevelA::initialise()
 {
     m_game_state.next_scene_id = -1;
     
-    GLuint map_texture_id = Utility::load_texture("tileset.png");
+    
+    
+    GLuint map_texture_id = Utility::load_texture("Frame_6.png");
     m_game_state.map = new Map(LEVEL_WIDTH, LEVEL_HEIGHT, LEVELA_DATA, map_texture_id, 1.0f, 4, 1);
     
     g_font_texture_id_1 = Utility::load_texture(FONT_FILEPATH);
@@ -74,7 +78,7 @@ void LevelA::initialise()
         PLAYER
     );
         
-    m_game_state.player->set_position(glm::vec3(5.0f, 0.0f, 0.0f));
+    m_game_state.player->set_position(glm::vec3(1.0f, -5.0f, 0.0f));
 
     // Jumping
     m_game_state.player->set_jumping_power(3.0f);
@@ -87,13 +91,13 @@ void LevelA::initialise()
 
     for (int i = 0; i < ENEMY_COUNT; i++)
     {
-    m_game_state.enemies[i] =  Entity(enemy_texture_id, 1.0f, 1.0f, 1.0f, ENEMY, GUARD, IDLE);
+        m_game_state.enemies[i] =  Entity(enemy_texture_id, 0.0f, 1.0f, 1.0f, ENEMY, WALKER, IDLE);
     }
 
 
     m_game_state.enemies[0].set_position(glm::vec3(5.0f, -5.0f, 0.0f));
     m_game_state.enemies[0].set_movement(glm::vec3(0.0f));
-    m_game_state.enemies[0].set_acceleration(glm::vec3(0.0f, -9.81f, 0.0f));
+    m_game_state.enemies[0].set_acceleration(glm::vec3(0.0f, 0.0f, 0.0f));
     
     
     /**
@@ -103,7 +107,7 @@ void LevelA::initialise()
     
     m_game_state.bgm = Mix_LoadMUS("VeLDA.mp3");
     Mix_PlayMusic(m_game_state.bgm, -1);
-    Mix_VolumeMusic(20.0f);
+    Mix_VolumeMusic(0.0f);
     
     m_game_state.jump_sfx = Mix_LoadWAV("bounce.wav");
 }
@@ -111,18 +115,47 @@ void LevelA::initialise()
 void LevelA::update(float delta_time)
 {
     m_game_state.player->update(delta_time, m_game_state.player, m_game_state.enemies, ENEMY_COUNT, m_game_state.map);
-    for (int i = 0; i < ENEMY_COUNT; i++) m_game_state.enemies[i].update(delta_time, m_game_state.player, m_game_state.enemies, ENEMY_COUNT, m_game_state.map);
+    for (int i = 0; i < ENEMY_COUNT; i++) {
+        glm::vec3 res = m_game_state.enemies[i].get_position();
+        if (res.y >= 0.0) {
+            check = !check;
+        } else if (res.y <= -5.05) {
+            check = !check;
+        }
+        if (check) {
+            res += new_pos;
+        } else {
+            res -= new_pos;
+        }
+        m_game_state.enemies[i].set_position(res);
+        m_game_state.enemies[i].update(delta_time, m_game_state.enemies, m_game_state.player, 1, m_game_state.map);
+//        bool yeet = m_game_state.enemies[i].get_collided_top() || m_game_state.enemies[i].get_collided_bottom() || m_game_state.enemies[i].get_collided_left() || m_game_state.enemies[i].get_collided_right();
+//        std::cout<< yeet << std::endl;
+    }
+    
     
     if (m_game_state.player->get_position().y < -10.0f) m_game_state.next_scene_id = 1;
+//    if (m_game_state.player->get_collided_top()) std::cout<<  "YOOOO " << std::endl;
+    bool end = m_game_state.player->get_collided_top() || m_game_state.player->get_collided_right() || m_game_state.player->get_collided_left();
+    if (end) {
+        std::cout << Utility::get_lives() << std::endl;
+        Utility::decrease();
+//        LIVES -= 1;
+        m_game_state.next_scene_id = 1;
+    }
+//    std::cout << Utility::get_lives() << std::endl;
+//    std::cout<< m_game_state.player->get_collided_top() << " " << m_game_state.player->get_collided_bottom() << " " << m_game_state.player->get_collided_left() << " " << m_game_state.player->get_collided_right() << " " << std::endl;
 }
 
 void LevelA::render(ShaderProgram *program)
 {
     m_game_state.map->render(program);
     m_game_state.player->render(program);
+    for (int i = 0; i < ENEMY_COUNT; i++)    m_game_state.enemies[i].render(program);
+
     
     
-    Utility::draw_text(program, g_font_texture_id_1, "lives: " + std::to_string(m_game_state.player->get_lives()), 0.35f, 0.05f, m_game_state.player->get_position());
+    Utility::draw_text(program, g_font_texture_id_1, "lives: " + std::to_string(Utility::get_lives()), 0.35f, 0.05f, m_game_state.player->get_position());
     
 //    if (m_game_state.player->get_lives() == 0) {
 //        Utility::draw_text(program, g_font_texture_id_1, "you lose ", 0.35f, 0.05f, m_game_state.player->get_position());

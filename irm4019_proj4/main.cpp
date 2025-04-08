@@ -230,7 +230,6 @@ void update()
     } else {
         g_view_matrix = glm::translate(g_view_matrix, glm::vec3(-5, 3.75, 0));
     }
-    
     if (g_current_scene == g_levelA && g_current_scene->get_state().player->get_position().y < -10.0f) switch_to_scene(g_levelB);
     if (g_current_scene == g_levelB && g_current_scene->get_state().player->get_position().y < -10.0f) switch_to_scene(g_levelC);
     if (g_current_scene == g_levelC && g_current_scene->get_state().player->get_position().y < -10.0f) switch_to_scene(g_end);
@@ -272,6 +271,10 @@ int main(int argc, char* argv[])
         update();
         
         if (g_current_scene->get_state().next_scene_id >= 0) switch_to_scene(g_levels[g_current_scene->get_state().next_scene_id]);
+        
+        if (Utility::get_lives() == 2) {
+            switch_to_scene(g_end);
+        }
         
         render();
     }

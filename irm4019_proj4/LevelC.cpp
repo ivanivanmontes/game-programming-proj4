@@ -2,22 +2,21 @@
 #include "Utility.h"
 
 #define LEVEL_WIDTH 14
-#define LEVEL_HEIGHT 8
+#define LEVEL_HEIGHT 10
 
-constexpr char SPRITESHEET_FILEPATH[] = "george_0.png",
+constexpr char SPRITESHEET_FILEPATH[] = "Frame_5.png",
            ENEMY_FILEPATH[]       = "soph.png";
 
 unsigned int LEVELC_DATA[] =
 {
-    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    3, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0,
+    3, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0,
+    3, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0,
+    3, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0,
     3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
     3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2
 };
+
 
 LevelC::~LevelC()
 {
@@ -32,7 +31,7 @@ void LevelC::initialise()
 {
     m_game_state.next_scene_id = -1;
     
-    GLuint map_texture_id = Utility::load_texture("tileset.png");
+    GLuint map_texture_id = Utility::load_texture("Frame_6.png");
     m_game_state.map = new Map(LEVEL_WIDTH, LEVEL_HEIGHT, LEVELC_DATA, map_texture_id, 1.0f, 4, 1);
     
     // Code from main.cpp's initialise()
@@ -63,8 +62,8 @@ void LevelC::initialise()
         0,                         // current animation index
         4,                         // animation column amount
         4,                         // animation row amount
-        1.0f,                      // width
-        1.0f,                       // height
+        0.70f,                      // width
+        0.70f,                       // height
         PLAYER
     );
         
@@ -98,7 +97,7 @@ void LevelC::initialise()
     
     m_game_state.bgm = Mix_LoadMUS("VeLDA.mp3");
     Mix_PlayMusic(m_game_state.bgm, -1);
-    Mix_VolumeMusic(20.0f);
+    Mix_VolumeMusic(0.0f);
     
     m_game_state.jump_sfx = Mix_LoadWAV("bounce.wav");
 }

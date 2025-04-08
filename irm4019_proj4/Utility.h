@@ -13,9 +13,13 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "ShaderProgram.h"
 
+static int LIVES = 3;
 class Utility {
 public:
+    
     // ————— METHODS ————— //
     static GLuint load_texture(const char* filepath);
     static void draw_text(ShaderProgram *program, GLuint font_texture_id, std::string text, float screen_size, float spacing, glm::vec3 position);
+    static int get_lives() {return LIVES; };
+    static void decrease() {LIVES -= 1; };
 };

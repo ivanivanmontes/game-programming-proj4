@@ -4,7 +4,7 @@
 #define LEVEL_WIDTH 14
 #define LEVEL_HEIGHT 8
 
-constexpr char SPRITESHEET_FILEPATH[] = "george_0.png",
+constexpr char SPRITESHEET_FILEPATH[] = "Frame_5.png",
            ENEMY_FILEPATH[]       = "soph.png",
 FONT_FILEPATH[]        = "font1.png";
 
@@ -36,7 +36,7 @@ void Menu::initialise()
 {
     m_game_state.next_scene_id = -1;
     
-    GLuint map_texture_id = Utility::load_texture("tileset.png");
+    GLuint map_texture_id = Utility::load_texture("Frame_6.png");
     g_font_texture_id = Utility::load_texture(FONT_FILEPATH);
     m_game_state.map = new Map(LEVEL_WIDTH, LEVEL_HEIGHT, MENU_DATA, map_texture_id, 1.0f, 4, 1);
     

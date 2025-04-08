@@ -27,6 +27,7 @@
 #include "LevelB.h"
 #include "LevelC.h"
 #include "EndScreen.h"
+#include "LoseScreen.h"
 #include "Effects.h"
 
 // ––––– CONSTANTS ––––– //
@@ -57,9 +58,10 @@ LevelA *g_levelA;
 LevelB *g_levelB;
 LevelC *g_levelC;
 EndScreen *g_end;
+LoseScreen *g_lose;
 
 Effects *g_effects;
-Scene   *g_levels[5];
+Scene   *g_levels[6];
 
 SDL_Window* g_display_window;
 
@@ -91,7 +93,7 @@ void switch_to_scene(Scene *scene)
 void initialise()
 {
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
-    g_display_window = SDL_CreateWindow("Hello, Special Effects!",
+    g_display_window = SDL_CreateWindow("proj 4",
                                       SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
                                       WINDOW_WIDTH, WINDOW_HEIGHT,
                                       SDL_WINDOW_OPENGL);
@@ -126,12 +128,14 @@ void initialise()
     g_levelB = new LevelB();
     g_levelC = new LevelC();
     g_end = new EndScreen();
+    g_lose = new LoseScreen();
     
     g_levels[0] = g_menu;
     g_levels[1] = g_levelA;
     g_levels[2] = g_levelB;
     g_levels[3] = g_levelC;
     g_levels[4] = g_end;
+    g_levels[5] = g_lose;
     
     // Start at level A
     switch_to_scene(g_levels[0]);
@@ -230,11 +234,14 @@ void update()
     } else {
         g_view_matrix = glm::translate(g_view_matrix, glm::vec3(-5, 3.75, 0));
     }
-    if (g_current_scene == g_levelA && g_current_scene->get_state().player->get_position().y < -10.0f) switch_to_scene(g_levelB);
-    if (g_current_scene == g_levelB && g_current_scene->get_state().player->get_position().y < -10.0f) switch_to_scene(g_levelC);
-    if (g_current_scene == g_levelC && g_current_scene->get_state().player->get_position().y < -10.0f) switch_to_scene(g_end);
+//    if (g_current_scene == g_levelA && g_current_scene->get_state().player->get_position().y < -10.0f) switch_to_scene(g_levelB);
+//    if (g_current_scene == g_levelB && g_current_scene->get_state().player->get_position().y < -10.0f) switch_to_scene(g_levelC);
+//    if (g_current_scene == g_levelC && g_current_scene->get_state().player->get_position().y < -10.0f) switch_to_scene(g_end);
     
 //    g_view_matrix = glm::translate(g_view_matrix, g_effects->get_view_offset());
+    if (g_current_scene->LIVES == 0) {
+        switch_to_scene(g_lose);
+    }
 }
 
 void render()
@@ -270,11 +277,16 @@ int main(int argc, char* argv[])
         process_input();
         update();
         
-        if (g_current_scene->get_state().next_scene_id >= 0) switch_to_scene(g_levels[g_current_scene->get_state().next_scene_id]);
-        
-        if (Utility::get_lives() == 2) {
-            switch_to_scene(g_end);
+        if (g_current_scene->get_state().next_scene_id >= 0) {
+            int resy = g_current_scene->LIVES;
+            g_levels[g_current_scene->get_state().next_scene_id]->set_lives(resy);
+            switch_to_scene(g_levels[g_current_scene->get_state().next_scene_id]);
         }
+            
+        
+//        if (Utility::get_lives() == 2) {
+//            switch_to_scene(g_end);
+//        }
         
         render();
     }

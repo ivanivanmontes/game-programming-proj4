@@ -2,7 +2,7 @@
 
 class LevelC : public Scene {
 public:
-    int ENEMY_COUNT = 1;
+    int ENEMY_COUNT = 36;
     
     ~LevelC();
     

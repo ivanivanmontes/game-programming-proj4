@@ -1,21 +1,24 @@
 #include "LevelC.h"
 #include "Utility.h"
 
-#define LEVEL_WIDTH 14
-#define LEVEL_HEIGHT 10
+#define LEVEL_WIDTH 40
+#define LEVEL_HEIGHT 8
 
 constexpr char SPRITESHEET_FILEPATH[] = "Frame_5.png",
            ENEMY_FILEPATH[]       = "soph.png";
 
 unsigned int LEVELC_DATA[] =
 {
-    3, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0,
-    3, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0,
-    3, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0,
-    3, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0,
-    3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2
+    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
+    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
+    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
+    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
+    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
+    3, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 2,
+    3, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 2,
+    3, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 2, 2, 2, 0, 0, 0, 0, 2, 2,
 };
+
 
 
 LevelC::~LevelC()
@@ -80,13 +83,16 @@ void LevelC::initialise()
 
     for (int i = 0; i < ENEMY_COUNT; i++)
     {
-    m_game_state.enemies[i] =  Entity(enemy_texture_id, 1.0f, 1.0f, 1.0f, ENEMY, GUARD, IDLE);
+        m_game_state.enemies[i] =  Entity(enemy_texture_id, 1.0f, 1.0f, 1.0f, ENEMY, WALKER, IDLE);
+        m_game_state.enemies[i].set_position(glm::vec3(i + 10.0f, -10.0f, 0.0f));
+        m_game_state.enemies[i].set_movement(glm::vec3(0.0f));
+        m_game_state.enemies[i].set_acceleration(glm::vec3(0.0f, 1.0f, 0.0f));
     }
 
 
-    m_game_state.enemies[0].set_position(glm::vec3(8.0f, 0.0f, 0.0f));
-    m_game_state.enemies[0].set_movement(glm::vec3(0.0f));
-    m_game_state.enemies[0].set_acceleration(glm::vec3(0.0f, -9.81f, 0.0f));
+//    m_game_state.enemies[0].set_position(glm::vec3(10.0f, -5.0f, 0.0f));
+//    m_game_state.enemies[0].set_movement(glm::vec3(0.0f));
+//    m_game_state.enemies[0].set_acceleration(glm::vec3(0.0f, 1.0f, 0.0f));
     
     
     
@@ -105,10 +111,14 @@ void LevelC::initialise()
 void LevelC::update(float delta_time)
 {
     m_game_state.player->update(delta_time, m_game_state.player, m_game_state.enemies, ENEMY_COUNT, m_game_state.map);
+    for (int i = 0; i < ENEMY_COUNT; i++) {
+        m_game_state.enemies[i].update(delta_time, m_game_state.enemies, m_game_state.player, 1, m_game_state.map);
+    }
 }
 
 void LevelC::render(ShaderProgram *program)
 {
     m_game_state.map->render(program);
     m_game_state.player->render(program);
+    for (int i = 0; i < ENEMY_COUNT; i++)    m_game_state.enemies[i].render(program);
 }

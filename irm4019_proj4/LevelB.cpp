@@ -1,7 +1,7 @@
 #include "LevelB.h"
 #include "Utility.h"
 
-#define LEVEL_WIDTH 20
+#define LEVEL_WIDTH 28
 #define LEVEL_HEIGHT 8
 
 constexpr char SPRITESHEET_FILEPATH[] = "Frame_5.png",
@@ -13,14 +13,14 @@ GLuint g_font_texture_id_2;
 
 unsigned int LEVELB_DATA[] =
 {
-    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,
-    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,
-    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,
-    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,
-    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 3,
-    3, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 2, 3,
-    3, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 2, 2, 0, 0, 1, 2, 3,
-    3, 2, 2, 2, 2, 2, 0, 0, 1, 1, 1, 0, 0, 2, 2, 0, 0, 2, 2, 3,
+    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
+    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
+    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
+    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
+    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
+    3, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 2,
+    3, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 2,
+    3, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 2,
 };
 
 
@@ -74,7 +74,7 @@ void LevelB::initialise()
         PLAYER
     );
         
-    m_game_state.player->set_position(glm::vec3(5.0f, 0.0f, 0.0f));
+    m_game_state.player->set_position(glm::vec3(1.0f, 0.0f, 0.0f));
 
     // Jumping
     m_game_state.player->set_jumping_power(3.0f);
@@ -87,13 +87,14 @@ void LevelB::initialise()
 
     for (int i = 0; i < ENEMY_COUNT; i++)
     {
-    m_game_state.enemies[i] =  Entity(enemy_texture_id, 1.0f, 1.0f, 1.0f, ENEMY, GUARD, IDLE);
+    m_game_state.enemies[i] =  Entity(enemy_texture_id, 1.0f, 1.0f, 1.0f, ENEMY, WALKER, IDLE);
+    m_game_state.enemies[i].set_position(glm::vec3(i + 15.0f, -5.0f, 0.0f));
     }
 
 
-    m_game_state.enemies[0].set_position(glm::vec3(8.0f, 0.0f, 0.0f));
+//    m_game_state.enemies[0].set_position(glm::vec3(5.0f, -5.0f, 0.0f));
     m_game_state.enemies[0].set_movement(glm::vec3(0.0f));
-    m_game_state.enemies[0].set_acceleration(glm::vec3(0.0f, -9.81f, 0.0f));
+    m_game_state.enemies[0].set_acceleration(glm::vec3(0.0f, 0.0f, 0.0f));
     
     
     
@@ -111,14 +112,37 @@ void LevelB::initialise()
 
 void LevelB::update(float delta_time)
 {
+    for (int i = 0; i < ENEMY_COUNT; i++) {
+        glm::vec3 res = m_game_state.enemies[i].get_position();
+        if (res.y >= 0.0) {
+            check = !check;
+        } else if (res.y <= -5.05) {
+            check = !check;
+        }
+        if (check) {
+            res += new_pos;
+        } else {
+            res -= new_pos;
+        }
+        m_game_state.enemies[i].set_position(res);
+        m_game_state.enemies[i].update(delta_time, m_game_state.enemies, m_game_state.player, 1, m_game_state.map);
+    }
+    
+    
     m_game_state.player->update(delta_time, m_game_state.player, m_game_state.enemies, ENEMY_COUNT, m_game_state.map);
-    if (m_game_state.player->get_position().y < -10.0f) m_game_state.next_scene_id = 1;
+    if (m_game_state.player->get_position().y < -10.0f && m_game_state.player->get_position().x >= 24.0f) m_game_state.next_scene_id = 3;
+    else if (m_game_state.player->get_position().y < -10.0f && m_game_state.player->get_position().x < 24.0f) {
+        LIVES -= 1;
+        m_game_state.player->set_position(glm::vec3(1.0f,0.0f,0.0f));
+    }
+    std::cout << m_game_state.player->get_position().x << std::endl;
 }
 
 void LevelB::render(ShaderProgram *program)
 {
     m_game_state.map->render(program);
     m_game_state.player->render(program);
+    for (int i = 0; i < ENEMY_COUNT; i++)    m_game_state.enemies[i].render(program);
     
-//    Utility::draw_text(program, g_font_texture_id_2, "lives: " + std::to_string(Utility::get_lives()), 0.35f, 0.05f, m_game_state.player->get_position());
+    Utility::draw_text(program, g_font_texture_id_2, "lives: " + std::to_string(LIVES), 0.35f, 0.05f, m_game_state.player->get_position());
 }

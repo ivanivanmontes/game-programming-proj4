@@ -129,22 +129,22 @@ void LevelA::update(float delta_time)
         }
         m_game_state.enemies[i].set_position(res);
         m_game_state.enemies[i].update(delta_time, m_game_state.enemies, m_game_state.player, 1, m_game_state.map);
-//        bool yeet = m_game_state.enemies[i].get_collided_top() || m_game_state.enemies[i].get_collided_bottom() || m_game_state.enemies[i].get_collided_left() || m_game_state.enemies[i].get_collided_right();
-//        std::cout<< yeet << std::endl;
     }
     
     
-    if (m_game_state.player->get_position().y < -10.0f) m_game_state.next_scene_id = 1;
-//    if (m_game_state.player->get_collided_top()) std::cout<<  "YOOOO " << std::endl;
     bool end = m_game_state.player->get_collided_top() || m_game_state.player->get_collided_right() || m_game_state.player->get_collided_left();
     if (end) {
-        std::cout << Utility::get_lives() << std::endl;
-        Utility::decrease();
-//        LIVES -= 1;
-        m_game_state.next_scene_id = 1;
+        LIVES -= 1;
+        m_game_state.player->set_position(glm::vec3(1.0f,0.0f,0.0f));
     }
-//    std::cout << Utility::get_lives() << std::endl;
-//    std::cout<< m_game_state.player->get_collided_top() << " " << m_game_state.player->get_collided_bottom() << " " << m_game_state.player->get_collided_left() << " " << m_game_state.player->get_collided_right() << " " << std::endl;
+    
+
+    if (m_game_state.player->get_position().y < -10.0f && m_game_state.player->get_position().x >= 12.0f) m_game_state.next_scene_id = 2;
+    else if (m_game_state.player->get_position().y < -10.0f && m_game_state.player->get_position().x < 12.0f) {
+        m_game_state.player->set_position(glm::vec3(1.0f,0.0f,0.0f));
+    }
+    
+    
 }
 
 void LevelA::render(ShaderProgram *program)
@@ -155,7 +155,7 @@ void LevelA::render(ShaderProgram *program)
 
     
     
-    Utility::draw_text(program, g_font_texture_id_1, "lives: " + std::to_string(Utility::get_lives()), 0.35f, 0.05f, m_game_state.player->get_position());
+    Utility::draw_text(program, g_font_texture_id_1, "lives: " + std::to_string(LIVES), 0.35f, 0.05f, m_game_state.player->get_position());
     
 //    if (m_game_state.player->get_lives() == 0) {
 //        Utility::draw_text(program, g_font_texture_id_1, "you lose ", 0.35f, 0.05f, m_game_state.player->get_position());

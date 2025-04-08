@@ -1,3 +1,13 @@
+/**
+* Author: Ivan Reynoso Montes
+* Assignment: Rise of the AI
+* Date due: 2025-04-05, 11:59pm
+* I pledge that I have completed this assignment without
+* collaborating with anyone else, in conformance with the
+* NYU School of Engineering Policies and Procedures on
+* Academic Misconduct.
+**/
+
 #include "Effects.h"
 
 Effects::Effects(glm::mat4 projection_matrix, glm::mat4 view_matrix) :  m_current_effect(NONE), m_alpha(1.0f), m_effect_speed(1.0f), m_size(10.0f)

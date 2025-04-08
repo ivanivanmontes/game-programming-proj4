@@ -5,7 +5,7 @@
 #define LEVEL_HEIGHT 8
 
 constexpr char SPRITESHEET_FILEPATH[] = "Frame_5.png",
-           ENEMY_FILEPATH[]       = "soph.png",
+           ENEMY_FILEPATH[]       = "troppa.png",
 FONT_FILEPATH[]        = "font1.png";
 
 GLuint g_font_texture_id;
@@ -102,7 +102,6 @@ void Menu::initialise()
     
     m_game_state.bgm = Mix_LoadMUS("VeLDA.mp3");
     Mix_PlayMusic(m_game_state.bgm, -1);
-    //TODO: change this
     Mix_VolumeMusic(0.0f);
     
     m_game_state.jump_sfx = Mix_LoadWAV("duermes.wav");

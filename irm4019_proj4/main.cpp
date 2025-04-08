@@ -138,7 +138,7 @@ void initialise()
     g_levels[5] = g_lose;
     
     // Start at level A
-    switch_to_scene(g_levels[3]);
+    switch_to_scene(g_levels[0]);
     
     g_effects = new Effects(g_projection_matrix, g_view_matrix);
     g_effects->start(SHRINK, 2.0f);
@@ -167,7 +167,11 @@ void process_input()
                         break;
                         
                     case SDLK_RETURN:
-                        if (g_current_scene == g_menu) switch_to_scene(g_levelA);
+                        if (g_current_scene == g_menu) {
+                            Mix_PlayChannel(-1,  g_current_scene->get_state().die_sfx, 0);
+                            switch_to_scene(g_levelA);
+                        }
+                            
                         break;
                         
                         

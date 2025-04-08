@@ -5,7 +5,7 @@
 #define LEVEL_HEIGHT 8
 
 constexpr char SPRITESHEET_FILEPATH[] = "Frame_5.png",
-           ENEMY_FILEPATH[]       = "soph.png",
+           ENEMY_FILEPATH[]       = "troppa.png",
 FONT_FILEPATH[] = "font1.png";
 
 //int LIVES = 3;
@@ -159,8 +159,6 @@ void LevelA::render(ShaderProgram *program)
     
     
     Utility::draw_text(program, g_font_texture_id_1, "lives: " + std::to_string(LIVES), 0.35f, 0.05f, m_game_state.player->get_position());
-    
-//    if (m_game_state.player->get_lives() == 0) {
-//        Utility::draw_text(program, g_font_texture_id_1, "you lose ", 0.35f, 0.05f, m_game_state.player->get_position());
-//    }
+    Utility::draw_text(program, g_font_texture_id_1, "Next Level", 0.35f, 0.05f, glm::vec3(12.0f, -4.0f, 0.0f));
+    Utility::draw_text(program, g_font_texture_id_1, "VVV", 0.35f, 0.05f, glm::vec3(12.0f, -5.0f, 0.0f));
 }

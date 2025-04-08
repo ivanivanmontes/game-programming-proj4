@@ -5,7 +5,7 @@
 #define LEVEL_HEIGHT 8
 
 constexpr char SPRITESHEET_FILEPATH[] = "Frame_5.png",
-           ENEMY_FILEPATH[]       = "soph.png",
+           ENEMY_FILEPATH[]       = "troppa.png",
 FONT_FILEPATH[] = "font1.png";
 
 GLuint g_font_texture_id_2;
@@ -105,7 +105,7 @@ void LevelB::initialise()
     
     m_game_state.bgm = Mix_LoadMUS("VeLDA.mp3");
     Mix_PlayMusic(m_game_state.bgm, -1);
-    Mix_VolumeMusic(0.0f);
+    Mix_VolumeMusic(20.0f);
     
     m_game_state.jump_sfx = Mix_LoadWAV("duermes.wav");
     m_game_state.walk_sfx = Mix_LoadWAV("capo.wav");
@@ -148,4 +148,5 @@ void LevelB::render(ShaderProgram *program)
     for (int i = 0; i < ENEMY_COUNT; i++)    m_game_state.enemies[i].render(program);
     
     Utility::draw_text(program, g_font_texture_id_2, "lives: " + std::to_string(LIVES), 0.35f, 0.05f, m_game_state.player->get_position());
+    Utility::draw_text(program, g_font_texture_id_2, "Next Level", 0.35f, 0.05f, glm::vec3(25.0f, -4.0f, 0.0f));
 }

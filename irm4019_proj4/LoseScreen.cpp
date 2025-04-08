@@ -5,7 +5,7 @@
 #define LEVEL_HEIGHT 8
 
 constexpr char SPRITESHEET_FILEPATH[] = "Frame_5.png",
-           ENEMY_FILEPATH[]       = "soph.png",
+           ENEMY_FILEPATH[]       = "troppa.png",
 FONT_FILEPATH[]        = "font1.png";
 
 GLuint g_font_texture_id_4;
@@ -87,7 +87,6 @@ void LoseScreen::initialise()
     
     m_game_state.bgm = Mix_LoadMUS("VeLDA.mp3");
     Mix_PlayMusic(m_game_state.bgm, -1);
-    //TODO: change this
     Mix_VolumeMusic(0.0f);
     
     m_game_state.jump_sfx = Mix_LoadWAV("duermes.wav");
@@ -95,14 +94,11 @@ void LoseScreen::initialise()
 
 void LoseScreen::update(float delta_time)
 {
-    m_game_state.player->update(delta_time, m_game_state.player, m_game_state.enemies, ENEMY_COUNT, m_game_state.map);
-    
-    if (m_game_state.player->get_position().y < -10.0f) m_game_state.next_scene_id = 1;
 }
 
 void LoseScreen::render(ShaderProgram *program)
 {
-//    m_game_state.map->render(program);
-//    m_game_state.player->render(program);
+    m_game_state.map->render(program);
+    m_game_state.player->render(program);
     Utility::draw_text(program, g_font_texture_id_4, "you lose", 0.35f, 0.05f, glm::vec3(2.0f, -2.0f, 0.0f));
 }

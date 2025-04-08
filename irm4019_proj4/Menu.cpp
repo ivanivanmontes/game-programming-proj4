@@ -105,7 +105,7 @@ void Menu::initialise()
     //TODO: change this
     Mix_VolumeMusic(0.0f);
     
-    m_game_state.jump_sfx = Mix_LoadWAV("bounce.wav");
+    m_game_state.jump_sfx = Mix_LoadWAV("duermes.wav");
 }
 
 void Menu::update(float delta_time)

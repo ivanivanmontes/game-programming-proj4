@@ -138,7 +138,7 @@ void initialise()
     g_levels[5] = g_lose;
     
     // Start at level A
-    switch_to_scene(g_levels[0]);
+    switch_to_scene(g_levels[3]);
     
     g_effects = new Effects(g_projection_matrix, g_view_matrix);
     g_effects->start(SHRINK, 2.0f);
@@ -191,9 +191,14 @@ void process_input()
     
     const Uint8 *key_state = SDL_GetKeyboardState(NULL);
 
-    if (key_state[SDL_SCANCODE_LEFT])        g_current_scene->get_state().player->move_left();
-        else if (key_state[SDL_SCANCODE_RIGHT])  g_current_scene->get_state().player->move_right();
-         
+    if (key_state[SDL_SCANCODE_LEFT]) {
+        g_current_scene->get_state().player->move_left();
+        Mix_PlayChannel(-1,  g_current_scene->get_state().walk_sfx, 0);
+    }
+    else if (key_state[SDL_SCANCODE_RIGHT]) {
+        g_current_scene->get_state().player->move_right();
+        Mix_PlayChannel(-1,  g_current_scene->get_state().walk_sfx, 0);
+    }
     if (glm::length( g_current_scene->get_state().player->get_movement()) > 1.0f)
         g_current_scene->get_state().player->normalise_movement();
     

@@ -107,7 +107,9 @@ void LevelB::initialise()
     Mix_PlayMusic(m_game_state.bgm, -1);
     Mix_VolumeMusic(0.0f);
     
-    m_game_state.jump_sfx = Mix_LoadWAV("bounce.wav");
+    m_game_state.jump_sfx = Mix_LoadWAV("duermes.wav");
+    m_game_state.walk_sfx = Mix_LoadWAV("capo.wav");
+    m_game_state.die_sfx = Mix_LoadWAV("feid.wav");
 }
 
 void LevelB::update(float delta_time)
@@ -132,6 +134,7 @@ void LevelB::update(float delta_time)
     m_game_state.player->update(delta_time, m_game_state.player, m_game_state.enemies, ENEMY_COUNT, m_game_state.map);
     if (m_game_state.player->get_position().y < -10.0f && m_game_state.player->get_position().x >= 24.0f) m_game_state.next_scene_id = 3;
     else if (m_game_state.player->get_position().y < -10.0f && m_game_state.player->get_position().x < 24.0f) {
+        Mix_PlayChannel(-1,  m_game_state.die_sfx, 0);
         LIVES -= 1;
         m_game_state.player->set_position(glm::vec3(1.0f,0.0f,0.0f));
     }

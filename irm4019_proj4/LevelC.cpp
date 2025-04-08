@@ -5,7 +5,8 @@
 #define LEVEL_HEIGHT 8
 
 constexpr char SPRITESHEET_FILEPATH[] = "Frame_5.png",
-           ENEMY_FILEPATH[]       = "soph.png";
+           ENEMY_FILEPATH[]       = "soph.png",
+FONT_FILEPATH[] = "font1.png";
 
 unsigned int LEVELC_DATA[] =
 {
@@ -19,7 +20,7 @@ unsigned int LEVELC_DATA[] =
     3, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 2, 2, 2, 0, 0, 0, 0, 2, 2,
 };
 
-
+GLuint g_font_texture_id_6;
 
 LevelC::~LevelC()
 {
@@ -36,7 +37,7 @@ void LevelC::initialise()
     
     GLuint map_texture_id = Utility::load_texture("Frame_6.png");
     m_game_state.map = new Map(LEVEL_WIDTH, LEVEL_HEIGHT, LEVELC_DATA, map_texture_id, 1.0f, 4, 1);
-    
+    g_font_texture_id_6 = Utility::load_texture(FONT_FILEPATH);
     // Code from main.cpp's initialise()
     /**
      George's Stuff
@@ -105,7 +106,9 @@ void LevelC::initialise()
     Mix_PlayMusic(m_game_state.bgm, -1);
     Mix_VolumeMusic(0.0f);
     
-    m_game_state.jump_sfx = Mix_LoadWAV("bounce.wav");
+    m_game_state.jump_sfx = Mix_LoadWAV("duermes.wav");
+    m_game_state.walk_sfx = Mix_LoadWAV("capo.wav");
+    m_game_state.die_sfx = Mix_LoadWAV("feid.wav");
 }
 
 void LevelC::update(float delta_time)
@@ -114,6 +117,13 @@ void LevelC::update(float delta_time)
     for (int i = 0; i < ENEMY_COUNT; i++) {
         m_game_state.enemies[i].update(delta_time, m_game_state.enemies, m_game_state.player, 1, m_game_state.map);
     }
+    if (m_game_state.player->get_position().y < -10.0f && m_game_state.player->get_position().x >= 33.0f) m_game_state.next_scene_id = 4;
+    else if (m_game_state.player->get_position().y < -10.0f && m_game_state.player->get_position().x < 33.0f) {
+        Mix_PlayChannel(-1,  m_game_state.die_sfx, 0);
+        LIVES -= 1;
+        m_game_state.player->set_position(glm::vec3(1.0f,0.0f,0.0f));
+    }
+    std::cout << m_game_state.player->get_position().x << std::endl;
 }
 
 void LevelC::render(ShaderProgram *program)
@@ -121,4 +131,5 @@ void LevelC::render(ShaderProgram *program)
     m_game_state.map->render(program);
     m_game_state.player->render(program);
     for (int i = 0; i < ENEMY_COUNT; i++)    m_game_state.enemies[i].render(program);
+    Utility::draw_text(program, g_font_texture_id_6, "lives: " + std::to_string(LIVES), 0.35f, 0.05f, m_game_state.player->get_position());
 }

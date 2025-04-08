@@ -107,9 +107,11 @@ void LevelA::initialise()
     
     m_game_state.bgm = Mix_LoadMUS("VeLDA.mp3");
     Mix_PlayMusic(m_game_state.bgm, -1);
-    Mix_VolumeMusic(0.0f);
+    Mix_VolumeMusic(20.0f);
     
-    m_game_state.jump_sfx = Mix_LoadWAV("bounce.wav");
+    m_game_state.jump_sfx = Mix_LoadWAV("duermes.wav");
+    m_game_state.walk_sfx = Mix_LoadWAV("capo.wav");
+    m_game_state.die_sfx = Mix_LoadWAV("feid.wav");
 }
 
 void LevelA::update(float delta_time)
@@ -134,6 +136,7 @@ void LevelA::update(float delta_time)
     
     bool end = m_game_state.player->get_collided_top() || m_game_state.player->get_collided_right() || m_game_state.player->get_collided_left();
     if (end) {
+        Mix_PlayChannel(-1,  m_game_state.die_sfx, 0);
         LIVES -= 1;
         m_game_state.player->set_position(glm::vec3(1.0f,0.0f,0.0f));
     }

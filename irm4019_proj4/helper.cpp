@@ -1,10 +1,3 @@
-//
-//  helper.cpp
-//  SDLProject
-//
-//  Created by Sebastián Romero Cruz on 5/31/22.
-//  Copyright © 2022 ctg. All rights reserved.
-//
 #define GL_SILENCE_DEPRECATION
 #include <iostream>
 

@@ -8,7 +8,7 @@ constexpr char SPRITESHEET_FILEPATH[] = "Frame_5.png",
            ENEMY_FILEPATH[]       = "troppa.png",
 FONT_FILEPATH[] = "font1.png";
 
-//int LIVES = 3;
+
 
 GLuint g_font_texture_id_1;
 
@@ -45,17 +45,12 @@ void LevelA::initialise()
     
     g_font_texture_id_1 = Utility::load_texture(FONT_FILEPATH);
     
-    // Code from main.cpp's initialise()
-    /**
-     George's Stuff
-     */
-    // Existing
     int player_walking_animation[4][4] =
     {
-        { 1, 5, 9, 13 },  // for George to move to the left,
-        { 3, 7, 11, 15 }, // for George to move to the right,
-        { 2, 6, 10, 14 }, // for George to move upwards,
-        { 0, 4, 8, 12 }   // for George to move downwards
+        { 1, 5, 9, 13 },
+        { 3, 7, 11, 15 },
+        { 2, 6, 10, 14 },
+        { 0, 4, 8, 12 }
     };
 
     glm::vec3 acceleration = glm::vec3(0.0f, -4.81f, 0.0f);
@@ -80,11 +75,8 @@ void LevelA::initialise()
         
     m_game_state.player->set_position(glm::vec3(1.0f, -5.0f, 0.0f));
 
-    // Jumping
     m_game_state.player->set_jumping_power(3.0f);
     
-    /**
-    Enemies' stuff */
     GLuint enemy_texture_id = Utility::load_texture(ENEMY_FILEPATH);
 
     m_game_state.enemies = new Entity[ENEMY_COUNT];
@@ -100,9 +92,7 @@ void LevelA::initialise()
     m_game_state.enemies[0].set_acceleration(glm::vec3(0.0f, 0.0f, 0.0f));
     
     
-    /**
-     BGM and SFX
-     */
+
     Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096);
     
     m_game_state.bgm = Mix_LoadMUS("VeLDA.mp3");

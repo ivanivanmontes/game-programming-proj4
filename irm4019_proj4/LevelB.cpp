@@ -48,10 +48,10 @@ void LevelB::initialise()
     // Existing
     int player_walking_animation[4][4] =
     {
-        { 1, 5, 9, 13 },  // for George to move to the left,
-        { 3, 7, 11, 15 }, // for George to move to the right,
-        { 2, 6, 10, 14 }, // for George to move upwards,
-        { 0, 4, 8, 12 }   // for George to move downwards
+        { 1, 5, 9, 13 },
+        { 3, 7, 11, 15 },
+        { 2, 6, 10, 14 },
+        { 0, 4, 8, 12 }
     };
 
     glm::vec3 acceleration = glm::vec3(0.0f, -4.81f, 0.0f);
@@ -79,8 +79,7 @@ void LevelB::initialise()
     // Jumping
     m_game_state.player->set_jumping_power(3.0f);
     
-    /**
-    Enemies' stuff */
+
     GLuint enemy_texture_id = Utility::load_texture(ENEMY_FILEPATH);
 
     m_game_state.enemies = new Entity[ENEMY_COUNT];
@@ -91,8 +90,6 @@ void LevelB::initialise()
     m_game_state.enemies[i].set_position(glm::vec3(i + 15.0f, -5.0f, 0.0f));
     }
 
-
-//    m_game_state.enemies[0].set_position(glm::vec3(5.0f, -5.0f, 0.0f));
     m_game_state.enemies[0].set_movement(glm::vec3(0.0f));
     m_game_state.enemies[0].set_acceleration(glm::vec3(0.0f, 0.0f, 0.0f));
     
@@ -138,7 +135,6 @@ void LevelB::update(float delta_time)
         LIVES -= 1;
         m_game_state.player->set_position(glm::vec3(1.0f,0.0f,0.0f));
     }
-    std::cout << m_game_state.player->get_position().x << std::endl;
 }
 
 void LevelB::render(ShaderProgram *program)

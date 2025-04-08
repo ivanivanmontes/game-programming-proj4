@@ -17,7 +17,7 @@ private:
     
     bool m_is_active = true;
     
-    int m_walking[4][4]; // 4x4 array for walking animations
+    int m_walking[4][4];
 
     
     EntityType m_entity_type;
@@ -140,7 +140,6 @@ public:
     void const set_jumping_power(float new_jumping_power) { m_jumping_power = new_jumping_power;}
     void const set_width(float new_width) {m_width = new_width; }
     void const set_height(float new_height) {m_height = new_height; }
-//    void const set_lives () { LIVES -= 1; }
 
     // Setter for m_walking
     void set_walking(int walking[4][4])

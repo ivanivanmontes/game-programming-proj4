@@ -109,14 +109,11 @@ void Menu::initialise()
 
 void Menu::update(float delta_time)
 {
-    m_game_state.player->update(delta_time, m_game_state.player, m_game_state.enemies, ENEMY_COUNT, m_game_state.map);
-    
-    if (m_game_state.player->get_position().y < -10.0f) m_game_state.next_scene_id = 1;
+
 }
 
 void Menu::render(ShaderProgram *program)
 {
-//    m_game_state.map->render(program);
-//    m_game_state.player->render(program);
+
     Utility::draw_text(program, g_font_texture_id, "my game: Press enter", 0.35f, 0.05f, glm::vec3(2.0f, -2.0f, 0.0f));
 }
